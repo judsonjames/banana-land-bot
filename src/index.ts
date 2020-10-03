@@ -22,11 +22,9 @@ const onMessage = (msg: Message, bot: Client) => {
   const args: string[] = commandBody.split(' ');
   const action: string = (args.shift() as string).toLowerCase();
 
-  if (!commands[action]) {
-    msg.reply('The command provide is invalid');
-    return;
+  if (commands[action]) {
+    commands[action].func(msg, args, bot);
   }
-  commands[action].func(msg, args, bot);
 };
 
 /**
@@ -37,6 +35,9 @@ const onReady = (bot: Client) => {
   console.log(`Logged in as ${bot.user?.tag}`);
 };
 
+/**
+ * Main Functionality
+ */
 const main = () => {
   const bot = new Discord.Client();
   bot.on('ready', () => onReady(bot));

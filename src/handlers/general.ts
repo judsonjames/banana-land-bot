@@ -6,7 +6,7 @@ import { Args } from '../utils/types';
  * @param {Message} msg - Message API
  */
 const ping = (msg: Message) => {
-  msg.reply('pong');
+  msg.channel.send('pong');
 };
 
 /**
@@ -16,7 +16,7 @@ const ping = (msg: Message) => {
  * @param {Client} bot - Discord Bot
  */
 const sayHi = (msg: Message, args: Args, bot: Client) => {
-  msg.reply(`Hi ${bot.user?.username}`);
+  msg.channel.send(`Hi ${msg.author.username}`);
 };
 
 export default {
