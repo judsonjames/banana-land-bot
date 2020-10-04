@@ -14,7 +14,7 @@ const auth = {
  * @param {Client} bot - Discord Bot
  */
 const onMessage = (msg: Message, bot: Client) => {
-  if (msg.author.bot || (prefix && !msg.content.startsWith(prefix))) {
+  if (msg.author.bot || !msg.content.startsWith(prefix)) {
     return;
   }
 

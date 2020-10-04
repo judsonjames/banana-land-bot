@@ -4,10 +4,11 @@
   "description": "Bot for the Banangineer's Banana Land Discord Server",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "ts-node-dev --respawn src/index.ts",
-    "start": "node ./dist",
-    "pretty": "npx prettier --write ./src/server"
+    "dev:start": "ts-node-dev --respawn src/index.ts",
+    "prod:build": "tsc",
+    "prod:start": "node ./dist",
+    "prod:build:start": "yarn prod:build && yarn prod:start",
+    "gen:pretty": "npx prettier --write ./src/server"
   },
   "author": "Banangineer",
   "license": "MIT",

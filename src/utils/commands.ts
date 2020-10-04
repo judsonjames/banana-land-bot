@@ -1,5 +1,6 @@
 import { Client, Message } from 'discord.js';
 import general from '../handlers/general';
+import sayings from '../handlers/sayings';
 import { Args, CommandsHash } from './types';
 
 /**
@@ -32,16 +33,9 @@ const commands: CommandsHash = {
     usage: 'General Help Command',
     func: helpResponse,
   },
-  ping: {
-    args: '<none>',
-    usage: 'Just checks that the server is alive',
-    func: general.ping,
-  },
-  sayhi: {
-    args: '<none>',
-    usage: 'Says Hi to whoever says Hi',
-    func: general.sayHi,
-  },
+  ...general,
+
+  ...sayings,
 };
 
 export default commands;

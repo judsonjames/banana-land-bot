@@ -3,6 +3,11 @@ dist/
 dist/**
 **/dist
 
+data/
+data/**
+**/data
+
+report.*.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,vscode,windows,linux,macos,intellij+all,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,vscode,windows,linux,macos,intellij+all,dotenv

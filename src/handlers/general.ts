@@ -1,5 +1,5 @@
-import { Client, Message } from 'discord.js';
-import { Args } from '../utils/types';
+import { Message } from 'discord.js';
+import { eyengineer, left_mouth, right_mouth } from '../utils/emojis';
 
 /**
  * Health Check for the Server
@@ -12,14 +12,38 @@ const ping = (msg: Message) => {
 /**
  * Just says Hi to whoever says hi to it
  * @param {Message} msg - Message API
- * @param {Args} args - Command Arguments
- * @param {Client} bot - Discord Bot
  */
-const sayHi = (msg: Message, args: Args, bot: Client) => {
+const sayHi = (msg: Message) => {
   msg.channel.send(`Hi ${msg.author.username}`);
 };
 
+const smile = (msg: Message) => {
+  msg.channel.send(`${left_mouth}${right_mouth}`);
+};
+
+const ohyeah = (msg: Message) => {
+  msg.channel.send(`${eyengineer}${eyengineer}\n${left_mouth}${right_mouth}`);
+};
+
 export default {
-  ping,
-  sayHi,
+  ping: {
+    args: '<none>',
+    usage: 'Just checks that the server is alive',
+    func: ping,
+  },
+  sayhi: {
+    args: '<none>',
+    usage: 'Says Hi to whoever says Hi',
+    func: sayHi,
+  },
+  smile: {
+    args: '<none>',
+    usage: 'Creepy Smile',
+    func: smile,
+  },
+  ohyeah: {
+    args: '<none>',
+    usage: 'Oh Yeah',
+    func: ohyeah,
+  },
 };

@@ -10,7 +10,7 @@
   - `BOT_PREFIX` : whatever you want your prefix to be, I'm using `b!`
   - `TOKEN`: The token mentioned earlier
 - Add the bot to a server you want to use for testing
-- Run the bot locally using `yarn dev`
+- Run the bot locally using `yarn dev:start`
 - Use a command with the bot. `<prefix>help` will DM you all commands available
 
 ### Creating New Commands
@@ -25,7 +25,7 @@ There is a Map that contains function references to all available commands. To c
 
 ### Testing
 
-- When done developing functionality for the bot, run the `yarn build` and `yarn start` commands
+- When done developing functionality for the bot, run the `yarn prod:build:start` command
   to ensure that the functionality will work in the transpiled version (ES5)
 
 ### Code Formatting and Styling
