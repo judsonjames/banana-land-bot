@@ -1,4 +1,4 @@
-import { createQuote, getAllQuotes, getQuote } from '../db/quotes';
+import { createQuote, getAllQuotes, getQuote, Quote } from '../db/quotes';
 import { CommandProps } from '../utils/types';
 
 const arkanisms = require('../../data/arkanisms.json');
@@ -33,7 +33,7 @@ const findQuote = ({ msg, args, bot }: CommandProps) => {
   const key: string = args[0];
   if (key) {
     getQuote(key)
-      .then(async (res: any) => {
+      .then(async (res: Quote) => {
         const user = await bot.users.fetch(res.author);
         msg.channel.send(`\`@${user.username}\`\n> ${res.quote}`);
       })
@@ -46,8 +46,8 @@ const findQuote = ({ msg, args, bot }: CommandProps) => {
 const listQuotes = ({ msg, bot }: CommandProps) => {
   const keys: string[] = [];
   getAllQuotes()
-    .then((quotes: any[]) => {
-      quotes.every((q) => {
+    .then((quotes: Quote[]) => {
+      quotes.forEach((q: Quote) => {
         keys.push(q.key);
       });
       bot.users.cache.get(msg.author.id).send(keys.join('\n'));

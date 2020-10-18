@@ -1,5 +1,5 @@
-import { DataTypes, ModelDefined } from 'sequelize';
-import { baseModelProps, db } from '.';
+import { DataTypes } from 'sequelize';
+import { BaseModel, baseModelProps, db } from '.';
 
 interface QuoteProps {
   author: string;
@@ -7,41 +7,29 @@ interface QuoteProps {
   quote: string;
 }
 
-interface QuoteCreationProps extends QuoteProps {}
-export type QuoteModel = ModelDefined<QuoteProps, QuoteCreationProps>;
+export class Quote extends BaseModel {
+  public author!: string;
+  public key!: string;
+  public quote!: string;
+}
 
-const Quote: QuoteModel = db.define(
-  'Quote',
+Quote.init(
   {
     ...baseModelProps,
-    author: {
-      type: DataTypes.STRING,
-    },
-    key: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    quote: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    author: { type: DataTypes.STRING, allowNull: false },
+    key: { type: DataTypes.STRING, allowNull: false, unique: true },
+    quote: { type: DataTypes.STRING, allowNull: false },
   },
-  {
-    tableName: 'quotes',
-  }
+  { tableName: 'quotes', sequelize: db }
 );
 
 export async function createQuote(props: QuoteProps) {
   const newQuote = await Quote.create(props);
-  return `Quote has been added, use \`${newQuote._attributes.key}\` to use the quote`;
+  return `Quote has been added, use \`${newQuote.key}\` to use the quote`;
 }
 
 export async function getQuote(key: string) {
-  const quote = await Quote.findOne({
-    where: { key },
-    rejectOnEmpty: true,
-  });
+  const quote = await Quote.findOne({ where: { key }, rejectOnEmpty: true });
   return quote;
 }
 

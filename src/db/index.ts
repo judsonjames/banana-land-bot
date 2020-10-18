@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export const db: Sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -12,3 +12,7 @@ export const baseModelProps = {
     primaryKey: true,
   },
 };
+
+export class BaseModel extends Model {
+  public id!: number;
+}
