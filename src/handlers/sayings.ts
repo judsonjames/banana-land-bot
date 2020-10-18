@@ -1,63 +1,60 @@
-import { Client, Message } from 'discord.js';
-import { Args, Hash } from '../utils/types';
-
-const sayingsFile: string = '../../data/sayings.json';
+import { createQuote, getAllQuotes, getQuote } from '../db/quotes';
+import { CommandProps } from '../utils/types';
 
 const arkanisms = require('../../data/arkanisms.json');
-const allSayings = require(sayingsFile);
-
-type Saying = Hash<string>;
-type UserSayings = Hash<Saying>;
-
-const listSayings = (msg: Message, args: Args, bot: Client) => {
-  // @ts-ignore
-  bot.users.cache
-    .get(msg.author.id)
-    .send(JSON.stringify(allSayings[msg.author.id]));
-};
-
-const addSaying = (msg: Message, args: Args, bot: Client) => {
-  const user = bot.users.cache.find((user) => user.id === msg.author.id);
-  const key: string = args[0];
-  const newSaying: string = args.splice(1).join(' ');
-
-  if (!user || !key || !newSaying) {
-    msg.channel.send('Not Enough Arguments!');
-    return;
-  }
-
-  const userSayings: Saying = allSayings && allSayings[user.id];
-
-  if (!userSayings[key]) {
-    userSayings[key] = newSaying;
-    msg.channel.send(`${key}: ${userSayings[key]}`);
-  }
-};
-
-const useSaying = (msg: Message, args: Args, bot: Client) => {
-  const user = bot.users.cache.find((user) => user.id === msg.author.id);
-  const saying: string = args[0];
-
-  if (!user || !saying) {
-    msg.channel.send('Not Enough Arguments!');
-    return;
-  }
-  const userSayings: UserSayings = allSayings && allSayings[user.id];
-  if (userSayings[saying]) {
-    msg.channel.send(`<@${user.id}>\n> ${userSayings[saying]}`);
-  }
-};
 
 /**
  * `We need to have a command to quote Arkane!` - JuanCena
- * @param {Message} msg - Discord Message API
- * @param {Args} args - Args provided from Command
+ * @param {CommandProps} props
  */
-const sayArkanism = (msg: Message, args: Args) => {
+const sayArkanism = ({ msg, args }: CommandProps) => {
   const key: string = args[0];
   if (key && arkanisms[key]) {
     msg.channel.send(`Arkane: ${arkanisms[key]}`);
   }
+};
+
+const addQuote = ({ msg, args }: CommandProps) => {
+  const key: string = args[0];
+  const quote: string = args.splice(1).join(' ');
+  const author: string = msg.author.id;
+  if (key && quote && author) {
+    createQuote({ key, quote, author })
+      .then((res: string) => {
+        msg.channel.send(res);
+      })
+      .catch((err) => {
+        msg.channel.send(`ERROR :: ${err}`);
+      });
+  }
+};
+
+const findQuote = ({ msg, args, bot }: CommandProps) => {
+  const key: string = args[0];
+  if (key) {
+    getQuote(key)
+      .then(async (res: any) => {
+        const user = await bot.users.fetch(res.author);
+        msg.channel.send(`\`@${user.username}\`\n> ${res.quote}`);
+      })
+      .catch((err) => {
+        msg.channel.send(`ERROR :: ${err}`);
+      });
+  }
+};
+
+const listQuotes = ({ msg, bot }: CommandProps) => {
+  const keys: string[] = [];
+  getAllQuotes()
+    .then((quotes: any[]) => {
+      quotes.every((q) => {
+        keys.push(q.key);
+      });
+      bot.users.cache.get(msg.author.id).send(keys.join('\n'));
+    })
+    .catch((err) => {
+      msg.channel.send('ERROR :: ', err);
+    });
 };
 
 export default {
@@ -66,19 +63,19 @@ export default {
     usage: 'Quote Arkane',
     func: sayArkanism,
   },
-  quote: {
+  'list-quotes': {
     args: '<key>',
     usage: 'something',
-    func: useSaying,
+    func: listQuotes,
+  },
+  quote: {
+    args: 'asdf',
+    usage: 'something',
+    func: findQuote,
   },
   'add-quote': {
-    args: '<key>',
+    args: 'asdf',
     usage: 'something',
-    func: addSaying,
-  },
-  'list-sayings': {
-    args: '<key>',
-    usage: 'something',
-    func: listSayings,
+    func: addQuote,
   },
 };

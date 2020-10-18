@@ -1,27 +1,27 @@
-import { Message } from 'discord.js';
 import { eyengineer, left_mouth, right_mouth } from '../utils/emojis';
+import { CommandProps } from '../utils/types';
 
 /**
  * Health Check for the Server
- * @param {Message} msg - Message API
+ * @param {CommandProps} props
  */
-const ping = (msg: Message) => {
+const ping = ({ msg }: CommandProps) => {
   msg.channel.send('pong');
 };
 
 /**
  * Just says Hi to whoever says hi to it
- * @param {Message} msg - Message API
+ * @param {CommandProps} props
  */
-const sayHi = (msg: Message) => {
+const sayHi = ({ msg }: CommandProps) => {
   msg.channel.send(`Hi ${msg.author.username}`);
 };
 
-const smile = (msg: Message) => {
+const smile = ({ msg }: CommandProps) => {
   msg.channel.send(`${left_mouth}${right_mouth}`);
 };
 
-const ohyeah = (msg: Message) => {
+const ohyeah = ({ msg }: CommandProps) => {
   msg.channel.send(`${eyengineer}${eyengineer}\n${left_mouth}${right_mouth}`);
 };
 

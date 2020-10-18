@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 import Discord, { Client, Message } from 'discord.js';
+import { db } from './db';
 import commands from './utils/commands';
 
 const prefix: string = process.env.BOT_PREFIX as string;
@@ -18,12 +19,11 @@ const onMessage = (msg: Message, bot: Client) => {
     return;
   }
 
-  const commandBody: string = msg.content.slice(prefix.length);
-  const args: string[] = commandBody.split(' ');
+  const args: string[] = msg.content.slice(prefix.length).split(' ');
   const action: string = (args.shift() as string).toLowerCase();
 
   if (commands[action]) {
-    commands[action].func(msg, args, bot);
+    commands[action].func({ msg, args, bot });
   }
 };
 
@@ -32,7 +32,12 @@ const onMessage = (msg: Message, bot: Client) => {
  * @param {Client} bot - Discord Bot
  */
 const onReady = (bot: Client) => {
+  db.sync();
   console.log(`Logged in as ${bot.user?.tag}`);
+};
+
+const onDisconnect = () => {
+  db.close();
 };
 
 /**
@@ -42,6 +47,7 @@ const main = () => {
   const bot = new Discord.Client();
   bot.on('ready', () => onReady(bot));
   bot.on('message', (msg: Message) => onMessage(msg, bot));
+  bot.on('disconnect', onDisconnect);
   bot.login(auth.token);
 };
 
