@@ -1,18 +1,18 @@
 import { createQuote, getAllQuotes, getQuote, Quote } from '../db/quotes';
 import { CommandProps } from '../utils/types';
 
-const arkanisms = require('../../data/arkanisms.json');
+// const arkanisms = require('../../data/arkanisms.json');
 
-/**
- * `We need to have a command to quote Arkane!` - JuanCena
- * @param {CommandProps} props
- */
-const sayArkanism = ({ msg, args }: CommandProps) => {
-  const key: string = args[0];
-  if (key && arkanisms[key]) {
-    msg.channel.send(`Arkane: ${arkanisms[key]}`);
-  }
-};
+// /**
+//  * `We need to have a command to quote Arkane!` - JuanCena
+//  * @param {CommandProps} props
+//  */
+// const sayArkanism = ({ msg, args }: CommandProps) => {
+//   const key: string = args[0];
+//   if (key && arkanisms[key]) {
+//     msg.channel.send(`Arkane: ${arkanisms[key]}`);
+//   }
+// };
 
 const addQuote = ({ msg, args }: CommandProps) => {
   const key: string = args[0];
@@ -58,11 +58,11 @@ const listQuotes = ({ msg, bot }: CommandProps) => {
 };
 
 export default {
-  arkanism: {
-    args: '<key>',
-    usage: 'Quote Arkane',
-    func: sayArkanism,
-  },
+  // arkanism: {
+  //   args: '<key>',
+  //   usage: 'Quote Arkane',
+  //   func: sayArkanism,
+  // },
   'list-quotes': {
     args: '<key>',
     usage: 'something',
