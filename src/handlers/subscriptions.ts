@@ -19,6 +19,9 @@ const jail = ({ msg, bot }: CommandProps) => {
     }
     const selectedUser = msg.guild.member(msg.mentions.users.first());
     const jailRole = msg.guild.roles.cache.find((role) => role.name === 'jail');
+
+    // Remove all roles associated with the role and reassign with the 'jail' role
+    msg.guild.roles.cache.forEach((role) => selectedUser.roles.remove(role.id));
     selectedUser.roles.add(jailRole.id);
   } else {
     bot.users.cache
