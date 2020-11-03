@@ -1,6 +1,8 @@
+import admin from '../handlers/admin';
 import general from '../handlers/general';
 import sayings from '../handlers/sayings';
 import subscriptions from '../handlers/subscriptions';
+import testing from '../handlers/testing';
 import { CommandProps, CommandsHash } from './types';
 
 /**
@@ -13,31 +15,40 @@ const helpResponse = ({ msg, args, bot }: CommandProps) => {
   const arg: string = args[0];
   const prefix: string = process.env.BOT_PREFIX as string;
   const response: string[] = [];
+  const usableCommands = msg.member.hasPermission('ADMINISTRATOR')
+    ? commands
+    : nonAdminCommands;
 
-  arg && commands[arg]
+  arg && usableCommands[arg]
     ? response.push(
-        `${prefix}${arg} ${commands[arg].args}`,
-        `${commands[arg].usage}`
+        `${prefix}${arg} ${usableCommands[arg].args}`,
+        `${usableCommands[arg].usage}`
       )
-    : Object.keys(commands).forEach((action: string) =>
-        response.push(`${prefix}${action} ${commands[action].args}`)
+    : Object.keys(usableCommands).forEach((action: string) =>
+        response.push(`${prefix}${action} ${usableCommands[action].args}`)
       );
 
   // @ts-ignore
   bot.users.cache.get(msg.author.id).send(response);
 };
 
-const commands: CommandsHash = {
+// Commands that are available to all users
+const nonAdminCommands: CommandsHash = {
   help: {
     args: '<none> or <command name>',
     usage: 'General Help Command',
     func: helpResponse,
   },
   ...general,
-
   ...sayings,
-
   ...subscriptions,
+};
+
+// Contains all commands, including ones available to admins
+const commands: CommandsHash = {
+  ...nonAdminCommands,
+  ...admin,
+  ...testing,
 };
 
 export default commands;
