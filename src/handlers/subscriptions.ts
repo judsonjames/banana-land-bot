@@ -1,7 +1,15 @@
 import { Message, Role } from 'discord.js';
 import { CommandProps } from '../utils/types';
 
-const allowedRoles = ['anime', 'tech', 'art', 'cars', 'music', 'programming'];
+const allowedRoles = [
+  'anime',
+  'tech',
+  'art',
+  'cars',
+  'music',
+  'programming',
+  'fitness',
+];
 
 function getRolesAndIds(msg: Message) {
   return msg.guild.roles.cache.reduce((acc, role: Role) => {
