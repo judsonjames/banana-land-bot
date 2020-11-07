@@ -1,8 +1,10 @@
+import { MessageEmbed } from 'discord.js';
 import admin from '../handlers/admin';
 import general from '../handlers/general';
 import sayings from '../handlers/sayings';
 import subscriptions from '../handlers/subscriptions';
 import testing from '../handlers/testing';
+import { banana_color } from './common';
 import { CommandProps, CommandsHash } from './types';
 
 /**
@@ -14,22 +16,25 @@ import { CommandProps, CommandsHash } from './types';
 const helpResponse = ({ msg, args, bot }: CommandProps) => {
   const arg: string = args[0];
   const prefix: string = process.env.BOT_PREFIX as string;
-  const response: string[] = [];
   const usableCommands = msg.member.hasPermission('ADMINISTRATOR')
     ? commands
     : nonAdminCommands;
+  const message: MessageEmbed = new MessageEmbed({ color: banana_color });
 
   arg && usableCommands[arg]
-    ? response.push(
+    ? message.addField(
         `${prefix}${arg} ${usableCommands[arg].args}`,
-        `${usableCommands[arg].usage}`
+        usableCommands[arg].usage
       )
-    : Object.keys(usableCommands).forEach((action: string) =>
-        response.push(`${prefix}${action} ${usableCommands[action].args}`)
-      );
+    : Object.keys(usableCommands).forEach((action: string) => {
+        message.addField(
+          `${prefix}${action} ${usableCommands[action].args}`,
+          usableCommands[action].usage
+        );
+      });
 
   // @ts-ignore
-  bot.users.cache.get(msg.author.id).send(response);
+  bot.users.cache.get(msg.author.id).send(message);
 };
 
 // Commands that are available to all users
