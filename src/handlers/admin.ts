@@ -67,11 +67,37 @@ const createInterest = ({ msg, args, bot }: CommandProps) => {
   }
 };
 
+const kickMembers = ({ msg }: CommandProps) => {
+  if (msg.member.hasPermission('ADMINISTRATOR')) {
+    msg.mentions.members.forEach(
+      (member) => !member.hasPermission('ADMINISTRATOR') && member.kick()
+    );
+  }
+};
+
+const banMembers = ({ msg }: CommandProps) => {
+  if (msg.member.hasPermission('ADMINISTRATOR')) {
+    msg.mentions.members.forEach(
+      (member) => !member.hasPermission('ADMINISTRATOR') && member.ban()
+    );
+  }
+};
+
 export default {
   jail: {
     args: '<user>',
     usage: 'Only Mods: Remove all Roles and Mute them',
     func: jail,
+  },
+  kick: {
+    args: '<user> or <user>[]',
+    usage: 'Only Mods: Kick all members mentioned in the message',
+    func: kickMembers,
+  },
+  ban: {
+    args: '<user> or <user>[]',
+    usage: 'Only Mods: Ban all members mentioned in the message',
+    func: banMembers,
   },
   'create-interest': {
     args: '<interest>',
