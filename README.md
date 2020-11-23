@@ -26,7 +26,7 @@ There is a Map that contains function references to all available commands. To c
 ### Testing
 
 - When done developing functionality for the bot, run the `yarn prod:build:start` command
-  to ensure that the functionality will work in the transpiled version (ES5)
+  to ensure that the functionality will work in the transpiled version (ES6 because of Sequelize)
 
 ### Code Formatting and Styling
 
